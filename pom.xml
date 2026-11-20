@@ -17,7 +17,7 @@
             <groupId>com.entityassist</groupId>
             <artifactId>entity-assist-reactive</artifactId>
             <version>${entityassist.version}</version>
-            <!-- The converter smoke test only needs the JPA API. -->
+            <!-- Use a minimal classpath for the programmatic Hibernate Reactive bootstrap. -->
             <exclusions>
                 <exclusion>
                     <groupId>*</groupId>
@@ -29,6 +29,47 @@
             <groupId>jakarta.persistence</groupId>
             <artifactId>jakarta.persistence-api</artifactId>
             <version>3.2.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.reactive</groupId>
+            <artifactId>hibernate-reactive-core</artifactId>
+            <version>4.5.14.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>org.hibernate.orm</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>7.4.15.Final</version>
+        </dependency>
+        <dependency>
+            <groupId>io.vertx</groupId>
+            <artifactId>vertx-pg-client</artifactId>
+            <version>5.1.10</version>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>33.8.0-jre</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.logging.log4j</groupId>
+            <artifactId>log4j-api</artifactId>
+            <version>2.26.1</version>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.validation</groupId>
+            <artifactId>jakarta.validation-api</artifactId>
+            <version>3.1.1</version>
+        </dependency>
+        <dependency>
+            <groupId>com.guicedee</groupId>
+            <artifactId>client</artifactId>
+            <version>2.6.0</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
     </dependencies>
 
@@ -62,6 +103,7 @@
                                     <executable>${native.image.executable}</executable>
                                     <classpathScope>runtime</classpathScope>
                                     <arguments>
+                                        <argument>--initialize-at-run-time=io.netty</argument>
                                         <argument>-cp</argument>
                                         <classpath/>
                                         <argument>com.entityassist.nativeimage.Main</argument>

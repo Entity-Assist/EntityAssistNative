@@ -13,9 +13,14 @@ public final class Main
 
     public static void main(String[] args)
     {
+        if (args.length == 1 && "--postgres".equals(args[0]))
+        {
+            PostgresSmoke.run();
+            return;
+        }
         if (args.length != 1)
         {
-            System.err.println("Usage: entityassist <YYYY-MM-DD>");
+            System.err.println("Usage: entityassist <YYYY-MM-DD|--postgres>");
             System.exit(2);
             return;
         }
