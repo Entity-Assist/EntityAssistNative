@@ -1,0 +1,79 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0">
+    <modelVersion>4.0.0</modelVersion>
+    <groupId>com.entityassist</groupId>
+    <artifactId>entity-assist-native-image</artifactId>
+    <version>2.0.1-SNAPSHOT</version>
+    <name>EntityAssist Native Image</name>
+
+    <properties>
+        <maven.compiler.release>25</maven.compiler.release>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <entityassist.version>2.0.1-SNAPSHOT</entityassist.version>
+        <native.image.executable>native-image</native.image.executable>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.entityassist</groupId>
+            <artifactId>entity-assist-reactive</artifactId>
+            <version>${entityassist.version}</version>
+            <!-- The converter smoke test only needs the JPA API. -->
+            <exclusions>
+                <exclusion>
+                    <groupId>*</groupId>
+                    <artifactId>*</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>jakarta.persistence</groupId>
+            <artifactId>jakarta.persistence-api</artifactId>
+            <version>3.2.0</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.15.0</version>
+            </plugin>
+        </plugins>
+    </build>
+
+    <profiles>
+        <profile>
+            <id>native</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>exec-maven-plugin</artifactId>
+                        <version>3.6.3</version>
+                        <executions>
+                            <execution>
+                                <id>build-native-image</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>exec</goal>
+                                </goals>
+                                <configuration>
+                                    <executable>${native.image.executable}</executable>
+                                    <classpathScope>runtime</classpathScope>
+                                    <arguments>
+                                        <argument>-cp</argument>
+                                        <classpath/>
+                                        <argument>com.entityassist.nativeimage.Main</argument>
+                                        <argument>-o</argument>
+                                        <argument>${project.build.directory}/entityassist</argument>
+                                    </arguments>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+</project>
